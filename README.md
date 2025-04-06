@@ -38,7 +38,7 @@
 
 使用 [`DataGrip`](https://www.jetbrains.com/datagrip/) 创建数据表并全选后通过右键 `Diagram > Show Diagram` 显示如下数据表设计及关系。
 
-![Diagram](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/TABELS.png)
+![Diagram](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/diagram.jpg)
 
 #### 设计思路及说明
 
