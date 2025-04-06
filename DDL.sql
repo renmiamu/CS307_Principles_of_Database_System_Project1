@@ -1,8 +1,9 @@
-DROP TABLE IF EXISTS sales;
-DROP TABLE IF EXISTS belong;
-DROP TABLE IF EXISTS supply;
-DROP TABLE IF EXISTS production;
-DROP TABLE IF EXISTS location;
+DROP TABLE IF EXISTS product_model_salesman;
+DROP TABLE IF EXISTS product_models_product;
+DROP TABLE IF EXISTS company_supply_center;
+DROP TABLE IF EXISTS company_product;
+DROP TABLE IF EXISTS company_region;
+
 DROP TABLE IF EXISTS salesman;
 DROP TABLE IF EXISTS product_models;
 DROP TABLE IF EXISTS supply_center;
@@ -44,46 +45,43 @@ CREATE TABLE if not exists salesman
     salesman_name   VARCHAR(50) NOT NULL,
     gender          VARCHAR(20),
     age             INT,
-    mobile_number   INT
+    mobile_number   varchar
 );
 
 --relations
-CREATE TABLE if not exists location
+CREATE TABLE if not exists company_region
 (
-    company_id INTEGER NOT NULL,
+    company_id INTEGER PRIMARY KEY ,
     city_id    INTEGER NOT NULL,
-    PRIMARY KEY (company_id, city_id),
-    CONSTRAINT fk_company_location FOREIGN KEY (company_id) REFERENCES companies (company_id),
-    CONSTRAINT fk_region_location FOREIGN KEY (city_id) REFERENCES regions (city_id)
+    CONSTRAINT company_region_fk1 FOREIGN KEY (company_id) REFERENCES companies (company_id),
+    CONSTRAINT company_region_fk2 FOREIGN KEY (city_id) REFERENCES regions (city_id)
 );
 
-CREATE TABLE if not exists production
+CREATE TABLE if not exists company_product
 (
     company_id      INTEGER     NOT NULL,
     product_code    VARCHAR(7)  NOT NULL,
     contract_number VARCHAR(10) NOT NULL,
     contract_date   DATE,
     PRIMARY KEY (company_id, product_code),
-    CONSTRAINT fk_company_production FOREIGN KEY (company_id) REFERENCES companies (company_id),
-    CONSTRAINT fk_product_production FOREIGN KEY (product_code) REFERENCES products (product_code)
+    CONSTRAINT company_product_fk1 FOREIGN KEY (company_id) REFERENCES companies (company_id),
+    CONSTRAINT company_product_fk2 FOREIGN KEY (product_code) REFERENCES products (product_code)
 );
-CREATE TABLE if not exists supply
+CREATE TABLE if not exists company_supply_center
 (
-    company_id    INTEGER     NOT NULL,
+    company_id    INTEGER     PRIMARY KEY ,
     supply_center VARCHAR(50) NOT NULL,
-    PRIMARY KEY (company_id, supply_center),
-    CONSTRAINT fk_company_supply FOREIGN KEY (company_id) REFERENCES companies (company_id),
-    CONSTRAINT fk_supply_center FOREIGN KEY (supply_center) REFERENCES supply_center (supply_center)
+    CONSTRAINT company_supply_center_fk1 FOREIGN KEY (company_id) REFERENCES companies (company_id),
+    CONSTRAINT company_supply_center_fk2 FOREIGN KEY (supply_center) REFERENCES supply_center (supply_center)
 );
-CREATE TABLE if not exists belong
+CREATE TABLE if not exists product_models_product
 (
     product_code VARCHAR(7)  NOT NULL,
-    model_id     VARCHAR(20) NOT NULL,
-    PRIMARY KEY (product_code, model_id),
-    CONSTRAINT fk_product_belong FOREIGN KEY (product_code) REFERENCES products (product_code),
-    CONSTRAINT fk_model_belong FOREIGN KEY (model_id) REFERENCES product_models (model_id)
+    model_id     VARCHAR(20) PRIMARY KEY ,
+    CONSTRAINT product_models_product_fk1 FOREIGN KEY (product_code) REFERENCES products (product_code),
+    CONSTRAINT product_models_product_fk2 FOREIGN KEY (model_id) REFERENCES product_models (model_id)
 );
-CREATE TABLE if not exists sales
+CREATE TABLE if not exists product_model_salesman
 (
     model_id               VARCHAR(20) NOT NULL,
     salesman_number        INT         NOT NULL,
@@ -91,6 +89,6 @@ CREATE TABLE if not exists sales
     estimated_deliver_date DATE,
     lodgement_date         DATE,
     PRIMARY KEY (model_id, salesman_number),
-    CONSTRAINT fk_model_model FOREIGN KEY (model_id) REFERENCES product_models (model_id),
-    CONSTRAINT fk_salesman_sales FOREIGN KEY (salesman_number) REFERENCES salesman (salesman_number)
+    CONSTRAINT product_model_salesman_fk1 FOREIGN KEY (model_id) REFERENCES product_models (model_id),
+    CONSTRAINT product_model_salesman_fk2 FOREIGN KEY (salesman_number) REFERENCES salesman (salesman_number)
 );
