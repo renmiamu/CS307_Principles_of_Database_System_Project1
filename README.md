@@ -28,7 +28,7 @@
 
 本小组使用 [drawio](https://www.diagrams.net/) 绘图工具，绘制本项目的 E-R 图，截图如下：
 
-![ER_Diagram](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/er_diagram.drawio.png)
+![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/er_diagram.png)
 
 ### Task 2: Relational Database Design
 
@@ -38,25 +38,20 @@
 
 使用 [`DataGrip`](https://www.jetbrains.com/datagrip/) 创建数据表并全选后通过右键 `Diagram > Show Diagram` 显示如下数据表设计及关系。
 
-![Diagram](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/diagram.jpg)
+![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/TABELS.png)
 
 #### 设计思路及说明
 
 ##### 数据表及其各列含义说明
 
-在整个项目中共创建了 11 个数据表，数据表和其中各列、外键的含义如下：
+在整个项目中共创建了 8 个数据表，数据表和其中各列、外键的含义如下：
 
-1. Enterprise 表存储公司的信息。包括公司id company_id（自增主键），客户公司 client_enterprise，公司所属的行业 industry。
-2. Region 表存储地区信息。包括城市id city_id（自增主键）、国家 country 、城市名 city。
-3. Products 表存储产品信息。包括产品编码 product_code（主键）、产品编码对应的产品名称 product_name。
-4. Supply_center 表存储供应中心信息。包括供应中心 supply_center（主键）、所属区域的管理员 director。
-5. Product_models 表存储产品型号的相关信息。包括产品型号id model_id（自增主键）、产品型号 product_model_name、产品型号对应的单价 unit_price。
-6. Salesman 表存储销售员的信息。包括销售员编号 salesman_number、销售员姓名 salesman_name、销售员性别 gender、销售员年龄 age、销售员电话 mobile_number。
-7. Enterprise_region 表建立公司和地区之间的联系。包括公司id company_id（主键，外键，参考Enterprise.company_id）、城市id city_id（外键，参考Region.city_id）。
-8. Enterprise_product 表建立公司和产品之间的联系。包括公司id company_id（外键，参考Enterprise.company_id）、产品编码 product_code（外键，参考Products.product_code）、合同编号 contract_number、合同日期 contract_date。这个表用于记录公司与产品的具体合同信息，如公司销售或采购的产品及其合同细节。
-9. Enterprise_supply_center 表建立公司和供应中心之间的联系。包括公司id company_id（主键，外键，参考Enterprise.company_id）、供应中心 supply_center（外键，参考Supply_center.supply_center）。
-10. Product_models_product 表建立产品和产品型号之间的联系。包括产品编码 product_code（外键，参考Products.product_code）、产品型号id model_id（主键，外键，参考Product_models.model_id）。这个表用于描述哪些产品有具体型号，是连接产品和产品型号的桥梁。
-11. Product_model_salesman 表记录销售员销售的产品型号信息。包括产品型号id model_id（外键，参考Product_models.model_id）、销售员编号 salesman_number（外键，参考Salesman.salesman_number）、销售数量 quantity、预计交货日期 estimated_deliver_date、登记日期 lodgement_date。这个表用于记录销售员销售的具体产品型号及相关销售信息。
-
-
+1. **Supply_center** 表存储供应中心的信息。包括供应中心名称 `supply_center`（主键），所属区域的管理员 `director`。
+2. **Region** 表存储地区信息。包括城市编号 `region_id`（主键），国家 `country`，城市名 `city`。
+3. **Enterprise** 表存储公司的信息。包括公司编号 `company_id`（主键），客户公司名 `client_enterprise`，所属行业 `industry`，关联的供应中心 `supply_center`（外键），所在地区编号 `region_id`（外键）。
+4. **Contract** 表存储合同信息。包括合同编号 `contract_number`（主键），合同签订日期 `contract_date`，签约企业编号 `enterprise`（外键）。
+5. **Products** 表存储产品信息。包括产品编码 `product_code`（主键），产品名称 `product_name`。
+6. **Product_models** 表存储产品型号的相关信息。包括产品型号编号 `model_id`（主键），型号名称 `product_model_name`，所属产品的编码 `product_code`（外键），该型号的单价 `unit_price`。
+7. **Salesman** 表存储销售人员的信息。包括销售员编号 `salesman_id`（主键），工号 `salesman_number`，姓名 `salesman_name`，性别 `gender`，年龄 `age`，手机号 `mobile_number`，所属供应中心 `supply_center`（外键）。
+8. **Contract_details** 表存储合同的详细内容。包括合同编号 `contract_id`、产品型号编号 `model_id`（复合主键）、销售员编号 `salesman_id`（外键），销售数量 `quantity`，预计交货日期 `estimated_deliver_date`，付款到账日期 `lodgement_date`。
 
