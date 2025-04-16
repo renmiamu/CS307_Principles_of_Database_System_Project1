@@ -1,0 +1,26 @@
+1;;Germany
+2;;Canada
+3;;Italy
+4;;United States
+5;;Spain
+6;;Netherlands/United Kingdom
+7;Beijing;China
+8;;Japan
+9;Shenzhen;China
+10;;Korea
+11;;Mexico
+12;;Switzerland
+13;;France
+14;;United Kingdom
+15;;Venezuela
+16;Shanghai;China
+17;Macao;China
+18;;Netherlands/Belgium
+19;Chengdu;China
+20;Dongguan;China
+21;Taiwan;China
+22;;Netherlands
+23;Hong Kong;China
+24;Guangzhou;China
+25;;Sweden
+26;Hangzhou;China
