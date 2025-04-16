@@ -10,7 +10,6 @@
 - Python和C++数据导入框架与编写
 - Python和C++部分多线程优化以及disable trigger和entrigger的对比测试
 - 多平台导入数据测试（Windows、macOS）
-- 项目相关的accuracy checking SQL语句编写
 - 项目报告写作
 
 **郑袭明**：
@@ -18,6 +17,7 @@
 - 数据库建表设计
 - Java数据筛选与导入
 - 基于Java的多种导入优化，如Batch、多线程等，并进行比较
+- 项目相关的accuracy checking SQL语句编写
 - 不同的Data Volume测试优化
 - 进行非Postgres导入测试（OpenGauss，MySQL）
 - 项目报告写作
@@ -54,4 +54,121 @@
 6. **Product_models** 表存储产品型号的相关信息。包括产品型号编号 `model_id`（主键），型号名称 `product_model_name`，所属产品的编码 `product_code`（外键），该型号的单价 `unit_price`。
 7. **Salesman** 表存储销售人员的信息。包括销售员编号 `salesman_id`（主键），工号 `salesman_number`，姓名 `salesman_name`，性别 `gender`，年龄 `age`，手机号 `mobile_number`，所属供应中心 `supply_center`（外键）。
 8. **Contract_details** 表存储合同的详细内容。包括合同编号 `contract_id`、产品型号编号 `model_id`（复合主键）、销售员编号 `salesman_id`（外键），销售数量 `quantity`，预计交货日期 `estimated_deliver_date`，付款到账日期 `lodgement_date`。
+
+##### 数据库构建的合理性
+
+- **满足三大范式**
+  - 通过示意图可以看到，每个数据表的每一列都是不可分割的，仅有一个值。
+  - 每个数据表都有主关键字，且主关键字都是 `UNIQUE` 的，其它数据元素能和主关键字一一对应。
+  - 通过设计外键连接，我们将同一数据表中具有“传递”关系的数据列设计成不同的表格进行设计，不存在非关键字段对任一候选关键字段的传递函数依赖。
+  - 可见，按以上设计思想设计的数据库满足三大范式的要求。
+- 满足项目要求文档所要求的其它详细注意点，如外键无环、Unique约束列等。
+
+### Task 3: Data Import
+
+#### Task 3.1 Basic Requirements:
+
+| 脚本名称                 | 作者          | 描述                                                         |
+| ------------------------ | ------------- | ------------------------------------------------------------ |
+| CSVFormatAdjustment.java | 陈明志&邱天润 | 数据筛选与格式调整调整。把原有数据中Supply Center 名为 Hong Kong, Macao and Taiwan regions of China 改为 Hong Kong and Macao and Taiwan regions of China 以便后续数据导入 |
+| CSVReader.java           | 陈明志        | 通过运行这个Java脚本可以将全部数据分割为8个txt文件作为中间文件，分别对应数据库设计的8个表格。 |
+| SQLGenerator.java        | 陈明志        | 将Resources中的8个txt文件作为输入，运行该脚本可以得到所有的建表语句以及插入内容的sql文件 |
+| Loader.java              | 邱天润        | 运行这个Java脚本可以导入所有的数据到数据库中                 |
+| FullLoader_MySQL.java    | 邱天润        | 运行这个Java脚本可以导入所有的数据到MySQL数据库中            |
+
+在处理数据的过程中，我们通过创造了中间文件的方式来处理数据。
+
+#### Task 3.2 Data Accuracy checking
+
+##### Q1. How many salesmans are there for each gender?
+
+```postgresql
+select gender, count(*)
+from salesman
+group by gender;
+```
+
+![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/Q1.png)
+
+##### Q2. How many companies are there in each supply center?
+
+```postgresql
+select Sc.supply_center, count(company_id)
+from Enterprise e
+         join Supply_center Sc on Sc.supply_center = e.supply_center
+group by Sc.supply_center;
+```
+
+![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/Q2.png)
+
+##### Q3. How many salesmans are there in each supply center?
+
+```postgresql
+select s.supply_center, count(salesman_id)
+from salesman s
+group by s.supply_center;
+```
+
+![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/Q3.png)
+
+##### Q4. How many salesmans are there within a given age range (lower and upper bounds)?  In this case: (30--40)
+
+```postgresql
+select count(*)
+from salesman
+where age > 30
+  and age <= 40;
+```
+
+![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/Q4_1.png)
+
+##### Q5. How many countries are there in each supply center?
+
+```postgresql
+select supply_center, count(distinct r.country) as country
+from region r
+         join Enterprise E on r.region_id = E.region_id
+group by supply_center;
+```
+
+![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/Q5.png)
+
+##### Q6. Given a country name (Italy or Canada), list all company names and their respective industries.
+
+```postgresql
+select country, client_enterprise, industry
+from Enterprise e
+         join Region R on R.region_id = e.region_id
+where country = 'Italy'
+   or country = 'Canada';
+```
+
+![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/Q6_1.png)
+
+##### Q7. Given a product code (L8N0649), list all product models and their corresponding unit prices.
+
+```postgresql
+select product_code, product_model_name, unit_price
+from product_models
+where product_code = 'L8N0649';
+```
+
+![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/Q7_1.png)
+
+##### Q8. Given a contract number (CSE0000003), list all order details in the contract, including (product model, order quantity, salesmans name, and lodgement_date).
+
+```postgresql
+select contract_number, product_model_name, quantity, salesman_name, lodgement_date
+from contract c
+         join Contract_details Cd on c.contract_number = Cd.contract_id
+         join Product_models Pm on Pm.model_id = Cd.model_id
+         join Salesman S on S.salesman_id = Cd.salesman_id
+where contract_number = 'CSE0000003';
+```
+
+![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/Q8_1.png)
+
+#### Task 3.3 Advanced requirements
+
+###  
 
