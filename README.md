@@ -70,13 +70,21 @@
 
 | 脚本名称                 | 作者          | 描述                                                         |
 | ------------------------ | ------------- | ------------------------------------------------------------ |
-| CSVFormatAdjustment.java | 陈明志&邱天润 | 数据筛选与格式调整调整。把原有数据中Supply Center 名为 Hong Kong, Macao and Taiwan regions of China 改为 Hong Kong and Macao and Taiwan regions of China 以便后续数据导入 |
+| CSVFormatAdjustment.java | 陈明志&邱天润 | 数据筛选与格式调整调整。                                     |
 | CSVReader.java           | 陈明志        | 通过运行这个Java脚本可以将全部数据分割为8个txt文件作为中间文件，分别对应数据库设计的8个表格。 |
 | SQLGenerator.java        | 陈明志        | 将Resources中的8个txt文件作为输入，运行该脚本可以得到所有的建表语句以及插入内容的sql文件 |
 | Loader.java              | 邱天润        | 运行这个Java脚本可以导入所有的数据到数据库中                 |
 | FullLoader_MySQL.java    | 邱天润        | 运行这个Java脚本可以导入所有的数据到MySQL数据库中            |
 
 在处理数据的过程中，我们通过创造了中间文件的方式来处理数据。
+
+我们首先使用CSVFormatAdjustment.java对数据进行调整，把原有数据中Supply Center 名为 “Hong Kong, Macao and Taiwan regions of China” 改为 “Hong Kong and Macao and Taiwan regions of China” 以便后续数据导入。
+
+然后我们使用CSVReader.java从原有csv文件中按行读入数据，以 “,” 分割，从而获得每个instance的具体信息。然后我们按建表语句分别将这些信息写入对应的txt文件，从而获得每个表对应的具体信息。
+
+然后我们使用SQLGenerator.java分别读取Resources中的8个txt文件，生成对应的sql插入语句。生成的Data.sql中即包含导入数据的全部建表语句。
+
+然后可以使用Loader.java从Data.sql中读入sql插入语句并执行，从而将全部数据导入数据库。由于Loader.java使用普通 `Statement` 逐条执行 SQL 文件中的完整插入语句，因此效率低下。后续3.3中我们会给出更高效的插入方式。
 
 #### Task 3.2 Data Accuracy checking
 
