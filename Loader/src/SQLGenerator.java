@@ -95,7 +95,7 @@ public class SQLGenerator {
                     "    CONSTRAINT Contract_details_fk1 FOREIGN KEY (contract_id) REFERENCES Contract (contract_number),\n" +
                     "    CONSTRAINT product_model_salesman_fk1 FOREIGN KEY (model_id) REFERENCES Product_models (model_id),\n" +
                     "    CONSTRAINT product_model_salesman_fk2 FOREIGN KEY (salesman_id) REFERENCES Salesman (salesman_id)\n" +
-                    ");");
+                    ");\n");
             //supply center
             String line;
             while ((line = supplyCenterReader.readLine())!= null) {
