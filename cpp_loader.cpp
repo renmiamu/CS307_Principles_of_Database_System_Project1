@@ -29,38 +29,47 @@ void load_data(pqxx::connection& C, const std::string& file, int& cnt){
     }
 }
 
-void batch_load_data(pqxx::connection& C, const std::string& file, int& count){
+void batch_load_data(pqxx::connection& C, const std::string& file, int& count) {
     std::ifstream sql_file(file);
     if (!sql_file) {
         std::cerr << "Can't open SQL file" << std::endl;
         return;
     }
     
-    std::string line;
-    while (true){
-        pqxx::work W(C);
-        pqxx::pipeline pipe(W);
-        int batch_count=0;
-        while (batch_count<batch_size&&std::getline(sql_file, line)){
-            if (line.rfind("INSERT", 0) == 0){
-                // Execute the SQL command
-                pipe.insert(line);
-                batch_count++;
+    std::unique_ptr<pqxx::work> W(new pqxx::work(C));
+    std::unique_ptr<pqxx::pipeline> pipe(new pqxx::pipeline(*W));
+    
+    try {
+        int batch_number = 0;
+        std::string line;
+        
+        while (std::getline(sql_file, line)) {
+            if (line.find(";") != std::string::npos && line.rfind("INSERT", 0) == 0) {
+                pipe->insert(line);
                 count++;
+                batch_number++;
+                
+                if (count % batch_size == 0) {
+                    pipe->complete();
+                    W->commit();
+                    
+                    W.reset(new pqxx::work(C));
+                    pipe.reset(new pqxx::pipeline(*W));
+                    batch_number = 0;
+                }
             }
         }
-        if (batch_count>0){
-            pipe.complete();
-            W.commit();
+        
+        if (batch_number > 0) {
+            pipe->complete();
+            W->commit();
         }
-        if (count%100000==0){
-            std::cout<<"successfully submit "<<count<<" data"<<std::endl; 
-        }
-        if (batch_count<batch_size){
-            break;
-        }
+        
+    } catch (const std::exception& e) {
+        W->abort();
+        std::cerr << "批量加载失败: " << e.what() << std::endl;
+        throw;
     }
-
 }
 
 
