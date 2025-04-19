@@ -1,11 +1,10 @@
 package Loaders;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Properties;
+import java.nio.file.*;
 import java.sql.*;
+import java.sql.Date;
+import java.util.*;
 
 public class Loader5Batch {
     private static final int BATCH_SIZE = 1000;
@@ -80,7 +79,6 @@ public class Loader5Batch {
 
     private static void loadData(String line) {
         String[] lineData = line.split(";");
-
         if (con != null) {
             try {
                 stmt.setString(1, lineData[0]);
@@ -122,6 +120,7 @@ public class Loader5Batch {
             }
         }
     }
+
     public static void main(String[] args) {
 
         Properties prop = loadDBUser();
@@ -131,25 +130,24 @@ public class Loader5Batch {
         openDB(prop);
         clearDataInTable();
 
-
         int cnt = 0;
         long start = System.currentTimeMillis();
         setPrepareStatement();
         try {
             for (String line : lines) {
                 loadData(line);//do insert command
+                cnt++;
                 if (cnt % BATCH_SIZE == 0) {
                     stmt.executeBatch();
                     System.out.println("insert " + cnt + " data successfully!");
                     stmt.clearBatch();
                 }
-                cnt++;
             }
 
+            // Ensure that any remaining batch is executed
             if (cnt % BATCH_SIZE != 0) {
                 stmt.executeBatch();
-                System.out.println("insert " + cnt % BATCH_SIZE + " data successfully!");
-
+                System.out.println("insert " + (cnt % BATCH_SIZE) + " data successfully!");
             }
             con.commit();
         } catch (SQLException e) {
@@ -163,4 +161,3 @@ public class Loader5Batch {
 
     }
 }
-

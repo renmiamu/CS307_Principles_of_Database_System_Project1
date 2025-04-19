@@ -176,22 +176,17 @@ public class Loader {
         // Empty target table
         openDB(prop);
         clearDataInTable();
-        closeDB();
 
         int cnt = 0;
-
         long start = System.currentTimeMillis();
         for (String line : lines) {
-            openDB(prop);
             loadData(line);//do insert command
-            closeDB();
-
             cnt++;
             if (cnt % 1000 == 0) {
                 System.out.println("insert " + 1000 + " data successfully!");
             }
         }
-
+        closeDB();
         long end = System.currentTimeMillis();
         System.out.println(cnt + " records successfully loaded");
         System.out.println("Loading speed : " + (cnt * 1000L) / (end - start) + " records/s");

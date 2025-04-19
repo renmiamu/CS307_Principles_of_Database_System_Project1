@@ -118,12 +118,14 @@ public class Loader1Awful {
 
         openDB(prop);
         clearDataInTable();
-
+        closeDB();
         int cnt = 0;
         long start = System.currentTimeMillis();
 
         for (String line : lines) {
+            openDB(prop);
             loadData(line);
+            closeDB();
             cnt++;
             if (cnt % 1000 == 0) {
                 System.out.println("Inserted " + cnt + " records...");
