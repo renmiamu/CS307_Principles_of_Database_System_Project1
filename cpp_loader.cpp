@@ -6,7 +6,7 @@
 
 std::string file_path = "Loader/resources/Data.sql";
 
-void load_data(pqxx::connection& C, const std::string& file){
+void load_data(pqxx::connection& C, const std::string& file, int& cnt){
     // Open the SQL file
     std::ifstream sql_file(file);
     if (!sql_file) {
@@ -23,6 +23,7 @@ void load_data(pqxx::connection& C, const std::string& file){
             W.exec(line);
             // Commit the transaction
             W.commit();
+            cnt++;
         }
     }
 }
@@ -133,13 +134,18 @@ void normal_insert(){
         }
 
         drop_and_create_table(C);
+        int cnt=0;
 
         auto start = std::chrono::high_resolution_clock::now();
-        load_data(C, file_path);
+        load_data(C, file_path, cnt);
         std::cout<<"Successfully Load"<<std::endl;
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-        std::cout << "Execution time: " << 1.0 * duration.count() / 1000 << " s" << std::endl;
+        auto result_time = 1.0 * duration.count() / 1000;
+        std::cout << "Execution time: " << result_time << " s" << std::endl;
+        auto records_per_second=cnt/result_time;
+        std::cout<<"records per second: " <<records_per_second<< " records/s"<<std::endl;
+
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         return;
