@@ -5,6 +5,7 @@
 
 
 std::string file_path = "Loader/resources/Data.sql";
+int batch_size = 1000;
 
 void load_data(pqxx::connection& C, const std::string& file, int& cnt){
     // Open the SQL file
@@ -27,6 +28,42 @@ void load_data(pqxx::connection& C, const std::string& file, int& cnt){
         }
     }
 }
+
+void batch_load_data(pqxx::connection& C, const std::string& file, int& count){
+    std::ifstream sql_file(file);
+    if (!sql_file) {
+        std::cerr << "Can't open SQL file" << std::endl;
+        return;
+    }
+    
+    std::string line;
+    while (true){
+        pqxx::work W(C);
+        pqxx::pipeline pipe(W);
+        int batch_count=0;
+        while (batch_count<batch_size&&std::getline(sql_file, line)){
+            if (line.rfind("INSERT", 0) == 0){
+                // Execute the SQL command
+                pipe.insert(line);
+                batch_count++;
+                count++;
+            }
+        }
+        if (batch_count>0){
+            pipe.complete();
+            W.commit();
+        }
+        if (count%100000==0){
+            std::cout<<"successfully submit "<<count<<" data"<<std::endl; 
+        }
+        if (batch_count<batch_size){
+            break;
+        }
+    }
+
+}
+
+
 void drop_and_create_table(pqxx::connection& C){
     std::string drop_table=R"(DROP TABLE IF EXISTS Contract_details;
     DROP TABLE IF EXISTS Salesman;
@@ -144,6 +181,44 @@ void normal_insert(){
         auto result_time = 1.0 * duration.count() / 1000;
         std::cout << "Execution time: " << result_time << " s" << std::endl;
         auto records_per_second=cnt/result_time;
+        std::cout << "total_records: " << cnt << std::endl;
+        std::cout<<"records per second: " <<records_per_second<< " records/s"<<std::endl;
+
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return;
+    }
+}
+
+void batch_insert(){
+    try {
+        pqxx::connection C(
+            "dbname=proj1 "
+            "user=proj "
+            "password=123456 "
+            "hostaddr=127.0.0.1 "
+            "port=5432"
+        );
+
+        // 2. 检查连接是否成功
+        if (C.is_open()) {
+            std::cout << "✅ 成功连接到数据库: " << C.dbname() << std::endl;
+            
+        } else {
+            std::cerr << "❌ 连接失败！" << std::endl;
+        }
+
+        drop_and_create_table(C);
+
+        int cnt=0;
+        auto start = std::chrono::high_resolution_clock::now();
+        batch_load_data(C, file_path, cnt);
+        std::cout<<"Successfully Load"<<std::endl;
+        auto end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        auto result_time = 1.0 * duration.count() / 1000;
+        std::cout << "Execution time: " << result_time << " s" << std::endl;
+        auto records_per_second=cnt/result_time;
         std::cout<<"records per second: " <<records_per_second<< " records/s"<<std::endl;
 
     } catch (const std::exception &e) {
@@ -157,5 +232,6 @@ void normal_insert(){
 
 int main(){
     normal_insert();
+    batch_insert();
     return 0;
 }
