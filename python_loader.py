@@ -3,10 +3,9 @@ import psycopg2
 from psycopg2 import sql
 
 file_path = "Loader/resources/Data.sql"
-
+cnt=0
 def normal_load():
     start_time = time.time()
-    cnt=0
     try:
         conn = psycopg2.connect(
             host="localhost", 
@@ -46,5 +45,26 @@ def normal_load():
     print(f"execution time: {execution_time:.2f}s")
     print(f"records per second: {records_per_second:.2f}records/s")
 
+def read_insert():
+    start_time = time.time()
+    conn = psycopg2.connect(
+            host="localhost", 
+            port=5432, 
+            user="proj", 
+            password="123456",  
+            database="proj1"
+        )
+    read_file=open(file_path).read()
+    cur=conn.cursor()
+    cur.execute(read_file)
+    conn.commit()
+    cur.close()
+    conn.close()
+    end_time = time.time()
+    print("read and insert finish")
+    print("execution time: ",end_time - start_time)
+    print("records per second: ",cnt/(end_time-start_time))
+
 if __name__ == '__main__':
     normal_load()
+    read_insert()
