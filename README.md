@@ -75,6 +75,8 @@
 | SQLGenerator.java        | 陈明志        | 将Resources中的8个txt文件作为输入，运行该脚本可以得到所有的建表语句以及插入内容的sql文件 |
 | Loader.java              | 邱天润        | 运行这个Java脚本可以导入所有的数据到数据库中                 |
 | FullLoader_MySQL.java    | 邱天润        | 运行这个Java脚本可以导入所有的数据到MySQL数据库中            |
+| cpp_loader.cpp           | 沈泓立        | 运行这个C++脚本可以成功导入所有数据，使用libpqxx库连接PostgreSQL数据库。其中有两种导入方式，一种是普通逐行导入，另一种是批量管道导入 |
+| python_loader.python     | 沈泓立        | 运行这个python脚本可以成功导入所有数据，使用了psycopg2库来连接和操作PostgreSQL数据库。其中有两种导入方式，一种是普通逐行导入，另一种是依赖于文本读取的批量导入 |
 
 在处理数据的过程中，我们通过创造了中间文件的方式来处理数据。
 
