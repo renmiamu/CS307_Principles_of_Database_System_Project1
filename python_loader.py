@@ -3,8 +3,7 @@ import psycopg2
 from psycopg2 import sql
 
 file_path = "Loader/resources/Data.sql"
-cnt=0
-def normal_load():
+def normal_load(cnt):
     start_time = time.time()
     try:
         conn = psycopg2.connect(
@@ -28,8 +27,7 @@ def normal_load():
                     cur.execute(command)
                     cnt+=1
                 except Exception as e:
-                    print("wrongful execution") 
-            
+                    print(f"wrongful execution") 
             print("SQL instruction finished")
             
     except Exception as e:
@@ -44,8 +42,9 @@ def normal_load():
     print("total sql:",cnt)
     print(f"execution time: {execution_time:.2f}s")
     print(f"records per second: {records_per_second:.2f}records/s")
+    return cnt
 
-def read_insert():
+def read_insert(cnt):
     start_time = time.time()
     conn = psycopg2.connect(
             host="localhost", 
@@ -66,5 +65,6 @@ def read_insert():
     print("records per second: ",cnt/(end_time-start_time))
 
 if __name__ == '__main__':
-    normal_load()
-    read_insert()
+    cnt=0
+    cnt=normal_load(cnt)
+    read_insert(cnt)

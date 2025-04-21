@@ -198,7 +198,7 @@ public class mysql_loader {
         closeDB();
         long end = System.currentTimeMillis();
         System.out.println(cnt + " records successfully loaded");
-        System.out.println("running time: "+(end-start));
+        System.out.println("running time: "+(end-start)/1000);
         System.out.println("Loading speed : " + (cnt * 1000L) / (end - start) + " records/s");
     }
 }

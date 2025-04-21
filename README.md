@@ -73,7 +73,7 @@
 | CSVReader.java           | 郑袭明 | 通过运行这个Java脚本可以将全部数据分割为8个txt文件作为中间文件，分别对应数据库设计的8个表格。 |
 | SQLGenerator.java        | 郑袭明 | 将Resources中的8个txt文件作为输入，运行该脚本可以得到所有的建表语句以及插入内容的sql文件 |
 | Loader.java              | 郑袭明 | 运行这个Java脚本可以导入所有的数据到数据库中                 |
-| FullLoader_MySQL.java    | 沈泓立 | 运行这个Java脚本可以导入所有的数据到MySQL数据库中            |
+| mysql_loader.java        | 沈泓立 | 运行这个Java脚本可以导入所有的数据到MySQL数据库中            |
 | cpp_loader.cpp           | 沈泓立 | 运行这个C++脚本可以成功导入所有数据，使用libpqxx库连接PostgreSQL数据库。其中有两种导入方式，一种是普通逐行导入，另一种是批量管道导入 |
 | python_loader.python     | 沈泓立 | 运行这个python脚本可以成功导入所有数据，使用了psycopg2库来连接和操作PostgreSQL数据库。其中有两种导入方式，一种是普通逐行导入，另一种是依赖于文本读取的批量导入 |
 
@@ -214,7 +214,64 @@ where contract_number = 'CSE0000003';
 
 可以看出，通过Disable Trigger，可以显著加快导入速度。当然，这么做的前提是所有数据已经经过前置检测，确认无误，否则可能导致数据库导入了错误的数据。
 
- 
+##### 2. Try to import data across multiple systems.
+
+在这一部分中，我们实现了两个平台的测试，Windows，macOS。
+
+其中，macOS硬件的测试环境为：
+
+- **MacBook Air, Apple M3, 16GB RAM, 512GB SSD**
+
+- **macOS Sequoia 15.1, Visual Studio Code 1.99.0**
+
+  Windows硬件环境同Task1
+
+| Operating System | Task        | Time(s) | Velocity(Records/s) |
+| ---------------- | ----------- | ------- | ------------------- |
+| MacOS            | Loader.java | 114.28  | 4834                |
+| Windows          | Loader.java | 48.16   | 11473               |
+
+我们可以看出，在通过相同的Java demo导入数据时，macOS操作系统显示出明显更加强大的性能，数据导入速度是windows系统的2.37倍。
+
+##### 3. Try to import data using various programming languages (e.g., Java, Python, C++).
+
+以下测试结果均建立在Task2的macOS测试环境下：
+
+**普通模式**：
+
+| Language | Total_Time(s) | Velocity(Records/s) |
+| -------- | ------------- | ------------------- |
+| Java     | 48.16         | 11473               |
+| C++      | 63.92         | 8644                |
+| Python   | 45.71         | 12086               |
+
+可以看出，在普通模式下，Java和Python的导入时间相当，均为45-50s，而C++的导入时间则较长，要超过60s。
+
+**优化模式（仅对比C++和Python的优化效果）**：
+
+`C++`：使用PostgreSQL的libpqxx库的管道(pipeline)功能实现高效批量插入，它通过`pqxx::pipeline`将多个INSERT语句批量发送到数据库，每积累1000条记录就提交一次事务，相比逐条插入减少了事务开销和网络往返次数，显著提高了大数据量导入的性能。
+
+`Python`：采用了一种简单直接的数据导入方式，它一次性读取整个SQL文件内容并通过`cursor.execute()`方法执行所有INSERT语句，相比逐条执行的方式减少了与数据库的交互次数，但由于是单次大事务提交，可能会产生较大的事务日志和锁竞争问题，适合中小规模数据导入但不适合真正的高性能批量导入场景。
+
+| Language | Initial time(s) | Optimized time(s) |
+| -------- | --------------- | ----------------- |
+| C++      | 63.92           | 7.61              |
+| Python   | 45.71           | 7.41              |
+
+可以看出，两种语言的优化方式均取得了显著的优化效果，将数据导入时间控制在了10s以内
+
+##### 4. Experiment with other databases.
+
+我们实现了两个平台的测试：Postgres(基本)、MySQL.
+
+以下测试结果均建立在Task2的macOS测试环境下：
+
+| DBMS     | Time(s) | Velocity(records/s) |
+| -------- | ------- | ------------------- |
+| Postgres | 48.16   | 11473               |
+| MySQL    | 319.71  | 1728                |
+
+可以看出，Postgres数据库管理系统的数据导入速度显著高于MySQL数据库的数据导入速度，具有更优的性能和效率。
 
 ##### 5. Try to import data with different data volumes.
 
