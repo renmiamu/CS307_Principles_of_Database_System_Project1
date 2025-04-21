@@ -1,0 +1,173 @@
+1;Allianz;Insurance;Europe;1
+2;HypoVereinsbank;Bank;Europe;1
+3;Nortel Networks;Electrical and electronic;America;2
+4;ENI;Oil refining;Europe;3
+5;Dynegy;Energy;America;4
+6;Repsol YPF;Oil refining;Europe;5
+7;General Electric;Electrical and electronic;America;4
+8;Unilever;Foodstuff;Europe;6
+9;J.P. Morgan Chase;Bank;America;4
+10;Baidu;Internet;Northern China;7
+11;Meiji Life Insurance;Insurance;Asia;8
+12;Ping An Insurance (Group) Company Of China;Insurance;Southern China;9
+13;Chevron;Oil refining;America;4
+14;Exxon Mobil;Oil refining;America;4
+15;SK;Oil refining;Asia;10
+16;Pemex;Crude;America;11
+17;Fiat;Car;Europe;3
+18;WorldCom;Telecommunications;America;4
+19;Citigroup;Finance;America;4
+20;Credit Suisse;Bank;Europe;12
+21;DaimlerChrysler;Car;Europe;1
+22;Kroger;Retail;America;4
+23;Mitsubishi Motors;Car;Asia;8
+24;Suez;Water;Europe;13
+25;U.S. Postal Service;Postal parcels;America;4
+26;BT;Telecommunications;Europe;14
+27;PDVSA;Oil refining;America;15
+28;Intel;Semiconductor;America;4
+29;Santander Central Hispano Group;Bank;Europe;5
+30;Procter & Gamble;Household chemicals;America;4
+31;Ford Motor;Car;America;4
+32;CGNU;Insurance;Europe;14
+33;Reliant Energy;Electricity and gas utilities;America;4
+34;Royal Dutch/Shell Group;Oil refining;Europe;6
+35;Boeing;Aerospace;America;4
+36;Sony;Electrical and electronic;Asia;8
+37;Ingram Micro;Retail;America;4
+38;Dell Computer;Computer;America;4
+39;Bilibili;Internet;Eastern China;16
+40;Samsung;Diversify;Asia;10
+41;Intl. Business Machines;Computer;America;4
+42;Future Bright Group;Foodstuff;Hong Kong and Macao and Taiwan regions of China;17
+43;Motorola;Electrical and electronic;America;4
+44;Enron;Energy;America;4
+45;BMW;Car;Europe;1
+46;Fortis;Insurance;Europe;18
+47;Sinopec;Petrochemical;Northern China;7
+48;J.C. Penney;Retail;America;4
+49;BNP Paribas;Bank;Europe;13
+50;Verizon Communications;Telecommunications;America;4
+51;Philip Morris;Food tobacco;America;4
+52;Tesco;Retail;Europe;14
+53;State Farm Insurance Cos.;Insurance;America;4
+54;Carrefour;Retail;Europe;13
+55;Chengdu AIG;Military;Southwestern China;19
+56;Cardinal Health;Pharmaceutical;America;4
+57;Siemens;Electrical and electronic;Europe;1
+58;OPPO;Computer;Southern China;20
+59;Industrial and Commercial Bank of China;Bank;Northern China;7
+60;Tencent;Internet;Southern China;9
+61;Nippon Telegraph & Telephone;Telecommunications;Asia;8
+62;Honda Motor;Car;Asia;8
+63;Berkshire Hathaway;Insurance;America;4
+64;American International Group;Insurance;America;4
+65;Hitachi;Electrical and electronic;Asia;8
+66;Fannie Mae;Finance;America;4
+67;China Petroleum;Oil refining;Northern China;7
+68;Royal Bank of Scotland;Bank;Europe;14
+69;Assicurazioni Generali;Insurance;Europe;3
+70;Conoco;Oil refining;America;4
+71;China Construction Bank;Bank;Northern China;7
+72;Munich Re Group;Insurance;Europe;1
+73;Kmart;Retail;America;4
+74;SBC Communications;Telecommunications;America;4
+75;HSBC Holdings;Bank;Europe;14
+76;MetLife;Insurance;America;4
+77;Foxconn;Electrical and electronic;Hong Kong and Macao and Taiwan regions of China;21
+78;Bank of America Corp.;Bank;America;4
+79;Koninklijke Ahold;Retail;Europe;22
+80;Alcatel;Electrical and electronic;Europe;13
+81;CHOW TAI FOOK;Jewelry;Hong Kong and Macao and Taiwan regions of China;23
+82;Fujitsu;Computer;Asia;8
+83;Target;Retail;America;4
+84;Electricite De France;Electricity;Europe;13
+85;TIAA-CREF;Insurance;America;4
+86;Freddie Mac;Finance;America;4
+87;NEC;Electrical and electronic;Asia;8
+88;Delphi Automotive Systems;Auto parts;America;4
+89;Lucent Technologies;Electrical and electronic;America;4
+90;Vivendi Universal;Amusement;Europe;13
+91;Dai-ichi Mutual Life Insurance;Insurance;Asia;8
+92;Morgan Stanley Dean Witter;Securities brokerage;America;4
+93;Nippon Life Insurance;Insurance;Asia;8
+94;Thyssen Krupp;Industrial and agricultural equipment;Europe;1
+95;Sears Roebuck;Retail;America;4
+96;MiHoYo;Game;Eastern China;16
+97;Wal-Mart Stores;Retail;America;4
+98;Mizuho Holdings;Bank;Asia;8
+99;Compaq Computer;Computer;America;4
+100;E. ON;Diversify;Europe;1
+101;Mitsui;Diversify;Asia;8
+102;France Tижlижcom;Telecommunications;Europe;13
+103;ABN AMRO Holding;Bank;Europe;22
+104;Merck;Pharmaceutical;America;4
+105;Total Fina Elf;Oil refining;Europe;13
+106;Nestlиж;Foodstuff;Europe;12
+107;E.I. du Pont de Nemours;Chemistry;America;4
+108;Itochu;Diversify;Asia;8
+109;Toyota Motor;Car;Asia;8
+110;Netease;Internet;Southern China;24
+111;Hewlett-Packard;Computer;America;4
+112;Costco Wholesale;Retail;America;4
+113;Volkswagen;Car;Europe;1
+114;China Electronics Technology Group Corporation;Electrical and electronic;Northern China;7
+115;Pfizer;Pharmaceutical;America;4
+116;Peugeot;Car;Europe;13
+117;Toshiba;Electrical and electronic;Asia;8
+118;Tokyo Electric Power;Electricity gas;Asia;8
+119;Robert Bosch;Electrical and electronic;Europe;1
+120;Renault;Car;Europe;13
+121;Crижdit Agricole;Bank;Europe;13
+122;Samsung Electronics;Electrical and electronic;Asia;10
+123;Duke Energy;Electricity gas;America;4
+124;Nissan Motor;Car;Asia;8
+125;Bank Of China;Bank;Northern China;7
+126;China Merchants Bank;Bank;Southern China;9
+127;Sina;Internet;Northern China;7
+128;Seng Fung;Jewelry;Hong Kong and Macao and Taiwan regions of China;17
+129;Deutsche Telekom;Telecommunications;Europe;1
+130;Matsushita Electric Industrial;Electrical and electronic;Asia;8
+131;Marubeni;Diversify;Asia;8
+132;AXA;Insurance;Europe;13
+133;Taiwan Semiconductor Manufacturing Company;Semiconductor;Hong Kong and Macao and Taiwan regions of China;21
+134;United Parcel Service;Postal parcels;America;4
+135;Sumitomo Life Insurance;Insurance;Asia;8
+136;UBS;Bank;Europe;12
+137;Huawei;Computer;Southern China;9
+138;Albertson''s;Retail;America;4
+139;Home Depot;Retail;America;4
+140;Merrill Lynch;Securities brokerage;America;4
+141;Zurich Financial Services;Insurance;Europe;12
+142;AT&T;Telecommunications;America;4
+143;Meituan;Internet;Northern China;7
+144;L.M. Ericsson;Electrical and electronic;Europe;25
+145;Alibaba;Internet;Eastern China;26
+146;BP;Oil refining;Europe;14
+147;McKesson HBOC;Retail;America;4
+148;China North Industries Group Corporation;Military;Northern China;7
+149;BASF;Chemistry;Europe;1
+150;Ing Group;Insurance;Europe;22
+151;State Power Corporation;Electricity;Northern China;7
+152;Agricultural Bank of China;Bank;Northern China;7
+153;Texaco;Oil refining;America;4
+154;USX;Oil refining;America;4
+155;Safeway;Retail;America;4
+156;Deutsche Post;Postal parcels;Europe;1
+157;Sumitomo;Diversify;Asia;8
+158;Xiaomi;Computer;Northern China;7
+159;Allstate;Insurance;America;4
+160;Johnson & Johnson;Pharmaceutical;America;4
+161;Mitsubishi Electric;Electrical and electronic;Asia;8
+162;Hang Seng Bank Limited;Bank;Hong Kong and Macao and Taiwan regions of China;23
+163;Hyundai;Diversify;Asia;10
+164;Prudential;Insurance;Europe;14
+165;Deutsche Bank;Bank;Europe;1
+166;Metro;Retail;Europe;1
+167;Nissho Iwai;Diversify;Asia;8
+168;Royal Philips Electronics;Electrical and electronic;Europe;22
+169;General Motors;Car;America;4
+170;Goldman Sachs Group;Securities brokerage;America;4
+171;Mitsubishi;Diversify;Asia;8
+172;Rwe Group;Electricity gas;Europe;1
+173;Pinduoduo;Internet;Eastern China;16
