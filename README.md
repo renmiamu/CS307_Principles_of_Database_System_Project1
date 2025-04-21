@@ -6,9 +6,9 @@
 **沈泓立**：
 
 - E-R图绘制
-- Java数据筛选与导入
+- 进行非Postgres导入测试（MySQL）
 - Python和C++数据导入框架与编写
-- Python和C++部分多线程优化以及disable trigger和entrigger的对比测试
+- Python和C++部分batch导入优化以及相关对比测试
 - 多平台导入数据测试（Windows、macOS）
 - 项目报告写作
 
@@ -19,7 +19,6 @@
 - 基于Java的多种导入优化，如Batch、多线程等，并进行比较
 - 项目相关的accuracy checking SQL语句编写
 - 不同的Data Volume测试优化
-- 进行非Postgres导入测试（OpenGauss，MySQL）
 - 项目报告写作
 
 贡献百分比相同，均为**50%**
