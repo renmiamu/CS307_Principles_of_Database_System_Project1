@@ -21,10 +21,10 @@ public class Loader1Awful {
         String url = "jdbc:postgresql://" + prop.getProperty("host") + "/" + prop.getProperty("database");
         try {
             con = DriverManager.getConnection(url, prop);
-            if (con != null) {
-                System.out.println("Successfully connected to the database "
-                        + prop.getProperty("database") + " as " + prop.getProperty("user"));
-            }
+//            if (con != null) {
+//                System.out.println("Successfully connected to the database "
+//                        + prop.getProperty("database") + " as " + prop.getProperty("user"));
+//            }
         } catch (SQLException e) {
             System.err.println("Database connection failed");
             System.err.println(e.getMessage());
@@ -129,7 +129,9 @@ public class Loader1Awful {
             cnt++;
             if (cnt % 1000 == 0) {
                 System.out.println("Inserted " + cnt + " records...");
+                break;
             }
+
         }
 
         closeDB();

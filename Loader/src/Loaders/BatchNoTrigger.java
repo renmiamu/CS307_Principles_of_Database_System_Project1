@@ -175,5 +175,7 @@ public class BatchNoTrigger {
         long end = System.currentTimeMillis();
         System.out.println(cnt + " records successfully loaded");
         System.out.println("Loading speed : " + (cnt * 1000L) / (end - start) + " records/s");
+        double run_time = (end - start)/1000.0;
+        System.out.println(String.format("%.2fs", run_time));
     }
 }

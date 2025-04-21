@@ -18,8 +18,8 @@ public class LoaderMultiThreaded {
         Properties prop = loadDBUser();
 
         clearDataInTable(prop);
+        disableTrigger(prop);
 
-        // multi thread execution
         int total = lines.size();
         int chunkSize = (total + THREAD_COUNT - 1) / THREAD_COUNT;
         ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);
@@ -43,6 +43,8 @@ public class LoaderMultiThreaded {
                 throw new RuntimeException("thread execution failed", e);
             }
         }
+
+        enableTrigger(prop);
 
         long end = System.currentTimeMillis();
         System.out.println("insert " + totalInserted + " data successfully!");
@@ -92,6 +94,34 @@ public class LoaderMultiThreaded {
             }
         } catch (Exception e) {
             throw new RuntimeException("failed to clear table", e);
+        }
+    }
+
+    private static void disableTrigger(Properties prop) {
+        try {
+            Class.forName("org.postgresql.Driver");
+            String url = "jdbc:postgresql://" + prop.getProperty("host") + "/" + prop.getProperty("database");
+            try (Connection con = DriverManager.getConnection(url, prop)) {
+                Statement stmt = con.createStatement();
+                stmt.executeUpdate("ALTER TABLE Contract_details DISABLE TRIGGER ALL;");
+                System.out.println("trigger disabled");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("failed to disable triggers", e);
+        }
+    }
+
+    private static void enableTrigger(Properties prop) {
+        try {
+            Class.forName("org.postgresql.Driver");
+            String url = "jdbc:postgresql://" + prop.getProperty("host") + "/" + prop.getProperty("database");
+            try (Connection con = DriverManager.getConnection(url, prop)) {
+                Statement stmt = con.createStatement();
+                stmt.executeUpdate("ALTER TABLE Contract_details ENABLE TRIGGER ALL;");
+                System.out.println("trigger enabled");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("failed to enable triggers", e);
         }
     }
 

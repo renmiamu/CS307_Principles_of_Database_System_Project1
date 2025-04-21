@@ -137,6 +137,7 @@ public class Loader3Prepare {
             cnt++;
             if (cnt % 1000 == 0) {
                 System.out.println("insert " + cnt + " data successfully!");
+                if (cnt == 50_0000) break;
             }
         }
 
@@ -144,6 +145,8 @@ public class Loader3Prepare {
         long end = System.currentTimeMillis();
         System.out.println(cnt + " records successfully loaded");
         System.out.println("Loading speed : " + (cnt * 1000L) / (end - start) + " records/s");
+        double run_time = (end - start)/1000.0;
+        System.out.println(String.format("%.2fs", run_time));
     }
 }
 

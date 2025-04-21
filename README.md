@@ -67,15 +67,15 @@
 
 #### Task 3.1 Basic Requirements:
 
-| 脚本名称                 | 作者          | 描述                                                         |
-| ------------------------ | ------------- | ------------------------------------------------------------ |
-| CSVFormatAdjustment.java | 陈明志&邱天润 | 数据筛选与格式调整调整。                                     |
-| CSVReader.java           | 陈明志        | 通过运行这个Java脚本可以将全部数据分割为8个txt文件作为中间文件，分别对应数据库设计的8个表格。 |
-| SQLGenerator.java        | 陈明志        | 将Resources中的8个txt文件作为输入，运行该脚本可以得到所有的建表语句以及插入内容的sql文件 |
-| Loader.java              | 邱天润        | 运行这个Java脚本可以导入所有的数据到数据库中                 |
-| FullLoader_MySQL.java    | 邱天润        | 运行这个Java脚本可以导入所有的数据到MySQL数据库中            |
-| cpp_loader.cpp           | 沈泓立        | 运行这个C++脚本可以成功导入所有数据，使用libpqxx库连接PostgreSQL数据库。其中有两种导入方式，一种是普通逐行导入，另一种是批量管道导入 |
-| python_loader.python     | 沈泓立        | 运行这个python脚本可以成功导入所有数据，使用了psycopg2库来连接和操作PostgreSQL数据库。其中有两种导入方式，一种是普通逐行导入，另一种是依赖于文本读取的批量导入 |
+| 脚本名称                 | 作者   | 描述                                                         |
+| ------------------------ | ------ | ------------------------------------------------------------ |
+| CSVFormatAdjustment.java | 郑袭明 | 数据筛选与格式调整调整。                                     |
+| CSVReader.java           | 郑袭明 | 通过运行这个Java脚本可以将全部数据分割为8个txt文件作为中间文件，分别对应数据库设计的8个表格。 |
+| SQLGenerator.java        | 郑袭明 | 将Resources中的8个txt文件作为输入，运行该脚本可以得到所有的建表语句以及插入内容的sql文件 |
+| Loader.java              | 郑袭明 | 运行这个Java脚本可以导入所有的数据到数据库中                 |
+| FullLoader_MySQL.java    | 沈泓立 | 运行这个Java脚本可以导入所有的数据到MySQL数据库中            |
+| cpp_loader.cpp           | 沈泓立 | 运行这个C++脚本可以成功导入所有数据，使用libpqxx库连接PostgreSQL数据库。其中有两种导入方式，一种是普通逐行导入，另一种是批量管道导入 |
+| python_loader.python     | 沈泓立 | 运行这个python脚本可以成功导入所有数据，使用了psycopg2库来连接和操作PostgreSQL数据库。其中有两种导入方式，一种是普通逐行导入，另一种是依赖于文本读取的批量导入 |
 
 在处理数据的过程中，我们通过创造了中间文件的方式来处理数据。
 
@@ -179,4 +179,53 @@ where contract_number = 'CSE0000003';
 
 #### Task 3.3 Advanced requirements
 
-###  
+##### 1. Try to **optimize your script**, and find **more than one ways** to import data, and provide a comparative analysis of the computational **efficiencies** between these ways.
+
+我们使用多种方法试图优化，包括恒定Connection，引入Prepare Statement，引入Transaction机制，批量导入，多线程优化和在导入时Disable All Triggers的优化，共六条。
+
+其中，前四条为Lab课上所提到的优化方式的实现。相关测试代码呈现在`/src/Loaders`中。为了方便比较，我们选用了多个表中的`Contract_details`一表作为比较对象，共 500000 条数据。
+
+其中，Windows 测试的硬件环境为：
+
+- **Lenovo Legion R9000P ARX8，AMD Ryzen 7 7745HX，32GB RAM，2TB SSD**
+- **Windows 11，IntelliJ IDEA 2023.3.4，PostgreSQL 17.3**
+
+| 采用以下的输出形式                                           | 导入用时比较                                                 |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| ![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/format.png) | ![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/LoaderComparator.png) |
+
+其中，Batch导入方式导入方式采取如下参数：
+
+- `BATCH_SIZE = 1000`。
+
+不难发现，各种导入方式速度逐渐得到提升，而最优的方式即为Multi-threads (With batches, no trigger)的方式，达到了116495条数/秒的高速。
+
+所有的Batch导入尝试和Multi-threads导入尝试罗列如下：
+
+![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/MultiThreadComparator.png)
+
+可以看到，导入速度在 `batch size` = 800 到 `batch size` = 1800 的区间内并无显著区别，均为45000 records/s 左右，且每次运行得到的导入速度也不尽相同，可能会上下浮动500 records/s 左右。因此选取上述区间中任意作为`batch size`均可，并无显著区别。
+
+对于在导入时Disable Trigger的行为，我们也有所实践：
+
+| Data             | Initial time | Optimized time | Multiple of optimization |
+| ---------------- | ------------ | -------------- | ------------------------ |
+| Contract_details | 11.23s       | 4.96s          | 2.26                     |
+
+可以看出，通过Disable Trigger，可以显著加快导入速度。当然，这么做的前提是所有数据已经经过前置检测，确认无误，否则可能导致数据库导入了错误的数据。
+
+ 
+
+##### 5. Try to import data with different data volumes.
+
+在这一部分中，我们修改了Contract_details表的导入量，使用 Loader3Prepare 导入Contract_details表中，基于不同数据量分别观察导入效率。详细数据见下表：
+
+可以看到，并没有产生明显的性能差异，导入效率基本在 5500 records/s左右。
+
+| N（总指令数） | 总时间 | 每秒插入指令数量 |
+| ------------- | ------ | ---------------- |
+| 1w            | 1.89s  | 5279             |
+| 5w            | 9.10s  | 5495             |
+| 10w           | 18.08s | 5531             |
+| 25w           | 45.05s | 5548             |
+| 50w           | 89.74s | 5571             |
