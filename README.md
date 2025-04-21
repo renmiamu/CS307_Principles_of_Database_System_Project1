@@ -28,7 +28,7 @@
 
 本小组使用 [drawio](https://www.diagrams.net/) 绘图工具，绘制本项目的 E-R 图，截图如下：
 
-![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/er_diagram.drawio.png)
+![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/er_diagram.drawio.png)
 
 ### Task 2: Relational Database Design
 
