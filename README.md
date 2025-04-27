@@ -27,7 +27,7 @@
 
 本小组使用 [drawio](https://www.diagrams.net/) 绘图工具，绘制本项目的 E-R 图，截图如下：
 
-![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/er_diagram.drawio.png)
+<img src="https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/er_diagram.drawio.png" style="zoom: 50%;" />
 
 ### Task 2: Relational Database Design
 
@@ -37,7 +37,7 @@
 
 使用 [`DataGrip`](https://www.jetbrains.com/datagrip/) 创建数据表并全选后通过右键 `Diagram > Show Diagram` 显示如下数据表设计及关系。
 
-![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/TABELS.png)
+<img src="https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/TABELS.png" style="zoom: 25%;" />
 
 #### 设计思路及说明
 
@@ -209,7 +209,7 @@ where contract_number = 'CSE0000003';
 
 可以看到，导入速度在 `batch size` = 800 到 `batch size` = 1800 的区间内并无显著区别，均为45000 records/s 左右，且每次运行得到的导入速度也不尽相同，可能会上下浮动500 records/s 左右。因此选取上述区间中任意作为`batch size`均可，并无显著区别。
 
-而对于多线程，可以看出在指定Batch_Size大小下，随着线程数增加，速度先变快后遇到瓶颈，只有在合理数量时（比如30线程），才能最大化性能；超出最佳点，反而因为争用导致效率下降
+而对于多线程，可以看出在指定Batch_Size大小下，随着线程数增加，速度先变快后遇到瓶颈，只有在合理数量时（比如30线程），才能最大化性能；超出最佳点，反而因为争用导致效率下降。
 
 对于在导入时Disable Trigger的行为，我们也有所实践：
 
