@@ -27,7 +27,7 @@
 
 本小组使用 [drawio](https://www.diagrams.net/) 绘图工具，绘制本项目的 E-R 图，截图如下：
 
-![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/er_diagram.drawio.png){width=300px height=200px}
+![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/er_diagram.drawio.png)
 
 ### Task 2: Relational Database Design
 
@@ -194,17 +194,22 @@ where contract_number = 'CSE0000003';
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | ![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/format.png) | ![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/LoaderComparator.png) |
 
-其中，Batch导入方式导入方式采取如下参数：
+其中，Batch导入方式和Multi-threads导入方式均采取其中最优的方式：
 
-- `BATCH_SIZE = 1000`。
+- Batch导入采用`BATCH_SIZE=1000`。
+- Multi-threads导入采用`THREADS=30, BATCH_SIZE=1000`。
 
-不难发现，各种导入方式速度逐渐得到提升，而最优的方式即为Multi-threads (With batches, no trigger)的方式，达到了116495条数/秒的高速。
+不难发现，各种导入方式速度逐渐得到提升，而最优的方式即为Multi-threads (With batches, no trigger)的方式，达到了330687条数/秒的高速。
 
 所有的Batch导入尝试和Multi-threads导入尝试罗列如下：
 
-![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/MultiThreadComparator.png)
+| Batch导入尝试                                                | Multi-threads导入尝试：线程数为变量                          |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/MultiThreadComparator.png)](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/MultiThreadComparator.png) | [![](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/MultiThread.png)](https://github.com/renmiamu/CS307_Principles_of_Database_System_Project1/blob/main/Photos/MultiThread.png) |
 
 可以看到，导入速度在 `batch size` = 800 到 `batch size` = 1800 的区间内并无显著区别，均为45000 records/s 左右，且每次运行得到的导入速度也不尽相同，可能会上下浮动500 records/s 左右。因此选取上述区间中任意作为`batch size`均可，并无显著区别。
+
+而对于多线程，可以看出在指定Batch_Size大小下，随着线程数增加，速度先变快后遇到瓶颈，只有在合理数量时（比如30线程），才能最大化性能；超出最佳点，反而因为争用导致效率下降
 
 对于在导入时Disable Trigger的行为，我们也有所实践：
 
